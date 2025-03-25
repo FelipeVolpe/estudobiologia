@@ -99,14 +99,28 @@
             color: red;
             font-weight: bold;
         }
+
+        .correct {
+            background-color: #d4edda;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+        }
+
+        .progress {
+            margin: 20px 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>SOBRE A DOENÇA:</h1>
+        <div class="progress" id="progress">1 de X</div>
+        <h1 id="nomedoenca"></h1>
         <table>
-            <h1 id="nomedoenca"></h1>
             <thead>
                 <tr>
                     <td>Vírus/Bac?</td>
@@ -130,24 +144,12 @@
 
     <button class="popup-button" onclick="enviarResp()">ENVIAR RESPOSTAS</button>
 
-
-
-
-
-
-    <!--<button class="popup-button" onclick="togglePopup()">Abrir Popup</button>
-
-    <div id="popup" class="popup">
-        <p>Este é um popup!</p>
-        <span class="close" onclick="togglePopup()">Fechar</span>
-    </div> -->
-
-
-
     <div class="container">
+        <h1>RESPOSTAS</h1>
         <table>
             <thead>
                 <tr>
+                    <td>Doença</td>
                     <td>Vírus/Bac?</td>
                     <td>Agente Etiológico</td>
                     <td>Transmissão</td>
@@ -158,38 +160,353 @@
             <tbody id="respostas"></tbody>
         </table>
     </div>
-</body>
-<script>
-    
-    var informacoes = {
-        virusoubac: {
 
+    <script>
+        var doencas = {
+            "AIDS": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "HIV" },
+                transmissao: { resposta: "Sexo desprotegido, sangue, mae-filho" },
+                sintomas: { resposta: "Imunodeficiencia, infeccoes oportunistas" },
+                prevencao: { resposta: "Camisinha, evitar contato com sangue infectado (sem vacina)" }
+            },
+            "HPV": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Papilomavirus Humano (HPV)" },
+                transmissao: { resposta: "Sexo desprotegido, contato direto" },
+                sintomas: { resposta: "Verrugas genitais, cancer de colo do utero" },
+                prevencao: { resposta: "Camisinha, vacina contra HPV" }
+            },
+            "Hepatite C": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "HCV" },
+                transmissao: { resposta: "Sangue contaminado, sexo desprotegido" },
+                sintomas: { resposta: "Inflamacao do figado, fadiga, ictericia" },
+                prevencao: { resposta: "Evitar contato com sangue infectado (sem vacina)" }
+            },
+            "Hepatite B": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "HBV" },
+                transmissao: { resposta: "Sangue contaminado, sexo desprotegido" },
+                sintomas: { resposta: "Inflamacao do figado, fadiga, ictericia" },
+                prevencao: { resposta: "Camisinha, vacina contra Hepatite B" }
+            },
+            "Hepatite A": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "HAV" },
+                transmissao: { resposta: "Agua/alimentos contaminados" },
+                sintomas: { resposta: "Nauseas, febre, ictericia" },
+                prevencao: { resposta: "Saneamento basico, vacina" }
+            },
+            "Poliomielite": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Poliovirus" },
+                transmissao: { resposta: "Contato fecal-oral" },
+                sintomas: { resposta: "Paralisia muscular" },
+                prevencao: { resposta: "Vacina (VOP/Sabin e VIP)" }
+            },
+            "Sarampo": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Morbillivirus" },
+                transmissao: { resposta: "Secrecoes respiratorias" },
+                sintomas: { resposta: "Febre, manchas vermelhas, tosse" },
+                prevencao: { resposta: "Vacina triplice viral (sarampo, caxumba, rubeola)" }
+            },
+            "Catapora": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Varicela-zoster" },
+                transmissao: { resposta: "Contato com goticulas ou lesoes" },
+                sintomas: { resposta: "Manchas avermelhadas, coceira, febre" },
+                prevencao: { resposta: "Vacina contra varicela" }
+            },
+            "Caxumba": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Paramyxovirus" },
+                transmissao: { resposta: "Saliva e secrecoes respiratorias" },
+                sintomas: { resposta: "Inchaco das glandulas salivares, febre" },
+                prevencao: { resposta: "Vacina triplice viral" }
+            },
+            "Varíola": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Orthopoxvirus variolae" },
+                transmissao: { resposta: "Goticulas respiratorias" },
+                sintomas: { resposta: "Febre alta, erupcoes cutaneas" },
+                prevencao: { resposta: "Erradicada (vacina suspensa)" }
+            },
+            "Rubéola": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Rubivirus" },
+                transmissao: { resposta: "Secrecoes respiratorias" },
+                sintomas: { resposta: "Manchas vermelhas, febre, risco para gestantes" },
+                prevencao: { resposta: "Vacina triplice viral" }
+            },
+            "Gripe": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Influenza" },
+                transmissao: { resposta: "Goticulas respiratorias" },
+                sintomas: { resposta: "Febre, dores no corpo, tosse" },
+                prevencao: { resposta: "Vacina anual contra gripe" }
+            },
+            "Covid-19": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "SARS-CoV-2" },
+                transmissao: { resposta: "Goticulas respiratorias, contato" },
+                sintomas: { resposta: "Febre, tosse, falta de ar, fadiga" },
+                prevencao: { resposta: "Vacina, mascara, higiene" }
+            },
+            "Dengue": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Dengue virus" },
+                transmissao: { resposta: "Picada do Aedes aegypti" },
+                sintomas: { resposta: "Febre alta, dor no corpo, manchas vermelhas" },
+                prevencao: { resposta: "Controle do mosquito, vacina" }
+            },
+            "Chikungunya": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Chikungunya virus" },
+                transmissao: { resposta: "Picada do Aedes aegypti" },
+                sintomas: { resposta: "Febre alta, dor intensa nas articulacoes" },
+                prevencao: { resposta: "Controle do mosquito" }
+            },
+            "Zika Vírus": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Zika virus" },
+                transmissao: { resposta: "Picada do Aedes aegypti" },
+                sintomas: { resposta: "Febre baixa, manchas vermelhas, microcefalia" },
+                prevencao: { resposta: "Controle do mosquito" }
+            },
+            "Febre Amarela": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Flavivirus" },
+                transmissao: { resposta: "Picada do Aedes aegypti ou Haemagogus" },
+                sintomas: { resposta: "Febre, ictericia, hemorragia" },
+                prevencao: { resposta: "Vacina contra febre amarela" }
+            },
+            "Raiva": {
+                virusoubac: { resposta: "VIRUS" },
+                agenteetiologico: { resposta: "Lyssavirus" },
+                transmissao: { resposta: "Mordida de animais infectados" },
+                sintomas: { resposta: "Hidrofobia, convulsoes, morte" },
+                prevencao: { resposta: "Vacinacao de animais, vacina pos-exposicao" }
+            },
+            "Sífilis": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Treponema pallidum" },
+                transmissao: { resposta: "Sexo desprotegido, mae-filho" },
+                sintomas: { resposta: "Feridas, manchas na pele, danos neurologicos" },
+                prevencao: { resposta: "Camisinha, tratamento com antibioticos" }
+            },
+            "Gonorreia": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Neisseria gonorrhoeae" },
+                transmissao: { resposta: "Sexo desprotegido" },
+                sintomas: { resposta: "Corrimento, dor ao urinar, infertilidade" },
+                prevencao: { resposta: "Camisinha, antibioticos" }
+            },
+            "Cólera": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Vibrio cholerae" },
+                transmissao: { resposta: "Agua/alimentos contaminados" },
+                sintomas: { resposta: "Diarreia intensa, desidratacao" },
+                prevencao: { resposta: "Saneamento basico, vacina em areas de risco" }
+            },
+            "Botulismo": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Clostridium botulinum" },
+                transmissao: { resposta: "Alimentos contaminados" },
+                sintomas: { resposta: "Paralisia muscular, insuficiencia respiratoria" },
+                prevencao: { resposta: "Higiene alimentar, evitar conservas caseiras" }
+            },
+            "Tétano": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Clostridium tetani" },
+                transmissao: { resposta: "Ferimentos contaminados" },
+                sintomas: { resposta: "Espasmos musculares, rigidez" },
+                prevencao: { resposta: "Vacina antitetanica" }
+            },
+            "Tuberculose": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Mycobacterium tuberculosis" },
+                transmissao: { resposta: "Goticulas respiratorias" },
+                sintomas: { resposta: "Tosse cronica, febre, suor noturno" },
+                prevencao: { resposta: "Vacina BCG, tratamento com antibioticos" }
+            },
+            "Hanseníase": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Mycobacterium leprae" },
+                transmissao: { resposta: "Contato prolongado com infectados" },
+                sintomas: { resposta: "Manchas na pele, dormencia, deformidades" },
+                prevencao: { resposta: "Diagnostico precoce, antibioticos" }
+            },
+            "Coqueluche": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Bordetella pertussis" },
+                transmissao: { resposta: "Goticulas respiratorias" },
+                sintomas: { resposta: "Tosse intensa, dificuldade para respirar" },
+                prevencao: { resposta: "Vacina DTP" }
+            },
+            "Leptospirose": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Leptospira interrogans" },
+                transmissao: { resposta: "Urina de animais em agua contaminada" },
+                sintomas: { resposta: "Febre, dor muscular, ictericia" },
+                prevencao: { resposta: "Evitar enchentes, controle de roedores" }
+            },
+            "Meningite": {
+                virusoubac: { resposta: "VIRUS/BAC" },
+                agenteetiologico: { resposta: "Diversos agentes (bacterias e virus)" },
+                transmissao: { resposta: "Goticulas, contato direto" },
+                sintomas: { resposta: "Febre, dor de cabeca, rigidez na nuca" },
+                prevencao: { resposta: "Vacinas (meningococica, pneumococica, viral)" }
+            },
+            "Febre Maculosa": {
+                virusoubac: { resposta: "BACTERIA" },
+                agenteetiologico: { resposta: "Rickettsia rickettsii" },
+                transmissao: { resposta: "Picada de carrapato" },
+                sintomas: { resposta: "Febre alta, manchas na pele, dores musculares" },
+                prevencao: { resposta: "Evitar areas com carrapatos" }
+            }
+        };
+
+        var doencasEmbaralhadas = [];
+        var doencaAtual = 0;
+        var respostas = [];
+
+        function embaralharDoencas() {
+            const chaves = Object.keys(doencas);
+
+            // Algoritmo de Fisher-Yates para embaralhar
+            for (let i = chaves.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1)); // Esta linha estava incompleta
+                [chaves[i], chaves[j]] = [chaves[j], chaves[i]];
+            }
+
+            doencasEmbaralhadas = chaves;
+            document.getElementById('progress').textContent = `1 de ${doencasEmbaralhadas.length}`;
         }
-        , agenteetiologico: {}
-        , transmissao: {}
-        , sintomas: {}
-        , prevencao: {}
-    }
+        function mostrarDoencaAtual() {
+            if (doencaAtual < doencasEmbaralhadas.length) {
+                const nomeDoenca = doencasEmbaralhadas[doencaAtual];
+                document.getElementById('nomedoenca').textContent = nomeDoenca;
+                document.getElementById('progress').textContent = `${doencaAtual + 1} de ${doencasEmbaralhadas.length}`;
 
-    function togglePopup() {
-        var popup = document.getElementById("popup");
-        popup.style.display = (popup.style.display === "block") ? "none" : "block";
-    }
-    function enviarResp() {
-        informacoes.virusoubac.input = document.getElementById('virusoubac').value
-        informacoes.agenteetiologico.input = document.getElementById('agenteetiologico').value
-        informacoes.transmissao.input = document.getElementById('transmissao').value
-        informacoes.sintomas.input = document.getElementById('sintomas').value
-        informacoes.prevencao.input = document.getElementById('prevencao').value
+                // Limpar os campos de input
+                document.getElementById('virusoubac').value = '';
+                document.getElementById('agenteetiologico').value = '';
+                document.getElementById('transmissao').value = '';
+                document.getElementById('sintomas').value = '';
+                document.getElementById('prevencao').value = '';
 
-    }
+                // Dar foco ao primeiro campo
+                document.getElementById('virusoubac').focus();
+            } else {
+                // Todas as doenças foram respondidas
+                mostrarResultados();
+            }
+        }
 
+        function enviarResp() {
+            const nomeDoenca = doencasEmbaralhadas[doencaAtual];
+            const doenca = doencas[nomeDoenca];
 
+            // Salvar as respostas
+            respostas.push({
+                nome: nomeDoenca,
+                virusoubac: {
+                    input: document.getElementById('virusoubac').value,
+                    resposta: doenca.virusoubac.resposta
+                },
+                agenteetiologico: {
+                    input: document.getElementById('agenteetiologico').value,
+                    resposta: doenca.agenteetiologico.resposta
+                },
+                transmissao: {
+                    input: document.getElementById('transmissao').value,
+                    resposta: doenca.transmissao.resposta
+                },
+                sintomas: {
+                    input: document.getElementById('sintomas').value,
+                    resposta: doenca.sintomas.resposta
+                },
+                prevencao: {
+                    input: document.getElementById('prevencao').value,
+                    resposta: doenca.prevencao.resposta
+                }
+            });
 
+            // Ir para a próxima doença
+            doencaAtual++;
+            mostrarDoencaAtual();
+        }
 
+        function mostrarResultados() {
+            const tabela = document.getElementById('respostas');
+            tabela.innerHTML = '';
 
+            respostas.forEach(resposta => {
+                const row = document.createElement('tr');
 
+                // Nome da doença
+                const nomeCell = document.createElement('td');
+                nomeCell.textContent = resposta.nome;
+                row.appendChild(nomeCell);
 
-</script>
+                // Função auxiliar para criar células com comparação
+                function criarCelulaComparacao(campo) {
+                    const cell = document.createElement('td');
+
+                    const inputDiv = document.createElement('div');
+                    inputDiv.textContent = resposta[campo].input || "(sem resposta)";
+                    cell.appendChild(inputDiv);
+
+                    const respostaDiv = document.createElement('div');
+                    respostaDiv.textContent = `Resposta: ${resposta[campo].resposta}`;
+                    respostaDiv.style.fontSize = '0.8em';
+                    respostaDiv.style.color = '#666';
+                    cell.appendChild(respostaDiv);
+
+                    // Verificar se a resposta está correta (ignorando maiúsculas/minúsculas)
+                    const inputNormalizado = resposta[campo].input?.toLowerCase().trim();
+                    const respostaNormalizada = resposta[campo].resposta?.toLowerCase().trim();
+
+                    if (inputNormalizado === respostaNormalizada) {
+                        cell.classList.add('correct');
+                    } else if (resposta[campo].input) {
+                        cell.classList.add('incorrect');
+                    }
+
+                    return cell;
+                }
+
+                // Adicionar células para cada campo
+                row.appendChild(criarCelulaComparacao('virusoubac'));
+                row.appendChild(criarCelulaComparacao('agenteetiologico'));
+                row.appendChild(criarCelulaComparacao('transmissao'));
+                row.appendChild(criarCelulaComparacao('sintomas'));
+                row.appendChild(criarCelulaComparacao('prevencao'));
+
+                tabela.appendChild(row);
+            });
+
+            // Esconder o formulário e mostrar apenas os resultados
+            document.querySelector('.container:first-child').style.display = 'none';
+            document.querySelector('.popup-button').style.display = 'none';
+        }
+
+        window.onload = () => {
+            embaralharDoencas();
+            mostrarDoencaAtual();
+
+            // Permitir enviar com Enter
+            document.querySelectorAll('.input-field').forEach(input => {
+                input.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        enviarResp();
+                    }
+                });
+            });
+        };
+    </script>
+</body>
 
 </html>
