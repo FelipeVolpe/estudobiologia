@@ -498,10 +498,19 @@
             mostrarDoencaAtual();
 
             // Permitir enviar com Enter
-            document.querySelectorAll('.input-field').forEach(input => {
+            document.querySelectorAll('.input-field').forEach((input, index, inputs) => {
                 input.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') {
-                        enviarResp();
+                        e.preventDefault(); // Impede o comportamento padrão do Enter
+
+                        // Se não for o último input, vai para o próximo
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                        // Se for o último input, envia as respostas
+                        else {
+                            enviarResp();
+                        }
                     }
                 });
             });
