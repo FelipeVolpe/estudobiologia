@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESTUDAR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: block;
+            margin-bottom: 20px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead tr {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .popup-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup-button:hover {
+            background-color: #0056b3;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        .popup .close {
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>SOBRE A DOENÇA:</h1>
+        <table>
+            <h1 id="nomedoenca"></h1>
+            <thead>
+                <tr>
+                    <td>Vírus/Bac?</td>
+                    <td>Agente Etiológico</td>
+                    <td>Transmissão</td>
+                    <td>Sintomas</td>
+                    <td>Prevenção</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" class="input-field" id="virusoubac"></td>
+                    <td><input type="text" class="input-field" id="agenteetiologico"></td>
+                    <td><input type="text" class="input-field" id="transmissao"></td>
+                    <td><input type="text" class="input-field" id="sintomas"></td>
+                    <td><input type="text" class="input-field" id="prevencao"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button class="popup-button" onclick="enviarResp()">ENVIAR RESPOSTAS</button>
+
+
+
+
+
+
+    <!--<button class="popup-button" onclick="togglePopup()">Abrir Popup</button>
+
+    <div id="popup" class="popup">
+        <p>Este é um popup!</p>
+        <span class="close" onclick="togglePopup()">Fechar</span>
+    </div> -->
+
+
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <td>Vírus/Bac?</td>
+                    <td>Agente Etiológico</td>
+                    <td>Transmissão</td>
+                    <td>Sintomas</td>
+                    <td>Prevenção</td>
+                </tr>
+            </thead>
+            <tbody id="respostas"></tbody>
+        </table>
+    </div>
+</body>
+<script>
+    
+    var informacoes = {
+        virusoubac: {
+
+        }
+        , agenteetiologico: {}
+        , transmissao: {}
+        , sintomas: {}
+        , prevencao: {}
+    }
+
+    function togglePopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = (popup.style.display === "block") ? "none" : "block";
+    }
+    function enviarResp() {
+        informacoes.virusoubac.input = document.getElementById('virusoubac').value
+        informacoes.agenteetiologico.input = document.getElementById('agenteetiologico').value
+        informacoes.transmissao.input = document.getElementById('transmissao').value
+        informacoes.sintomas.input = document.getElementById('sintomas').value
+        informacoes.prevencao.input = document.getElementById('prevencao').value
+
+    }
+
+
+
+
+
+
+
+</script>
+
+</html>
